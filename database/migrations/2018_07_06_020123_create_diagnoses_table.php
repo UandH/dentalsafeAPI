@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateUsersTable extends Migration
+class CreateDiagnosesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,12 @@ class CreateUsersTable extends Migration
      */
     public function up()
     {
-        Schema::create('users', function (Blueprint $table) {
+        Schema::create('diagnoses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('token_id');
+            $table->timestamp('incident_date');
+            $table->integer('dates_count');
+            $table->unsignedInteger('recommendation_tda_id');
+            $table->foreign('recommendation_tda_id')->references('id')->on('recommendation_tdas')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -27,6 +30,6 @@ class CreateUsersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('users');
+        Schema::dropIfExists('diagnoses');
     }
 }
