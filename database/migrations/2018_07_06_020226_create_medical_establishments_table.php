@@ -15,10 +15,11 @@ class CreateMedicalEstablishmentsTable extends Migration
     {
         Schema::create('medical_establishments', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type_service');
             $table->string('name');
             $table->string('address');
-            $table->string('coordinates');
+            $table->string('lat');
+            $table->string('lng');
+            $table->integer('schedule');
             $table->unsignedInteger('commune_id');
             $table->foreign('commune_id')->references('id')->on('communes')->onDelete('cascade');
             $table->timestamps();

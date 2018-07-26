@@ -16,6 +16,9 @@ class CreateTdasTable extends Migration
         Schema::create('tdas', function (Blueprint $table) {
             $table->increments('id');
             $table->string('tda');
+            $table->string('img');
+            $table->text('description');
+            $table->string('quantity');
             $table->timestamps();
         });
     }

@@ -19,3 +19,12 @@ use Illuminate\Http\Request;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
+
+//Teeths
+Route::get('/getTeeths', 'TeethController@index');
+
+//Tdas
+Route::post('/getTda', 'TdaController@getTdas');
+
+//Recommendations
+Route::post('/getRecommendation', 'RecommendationController@getRecommendation');

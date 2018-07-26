@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Diagnosis extends Model
 {
     protected $fillable = [
-        'incidentDate', 'datesCount'
+        'incidentDate'
     ];
 
     public function diagnosisUsers() {

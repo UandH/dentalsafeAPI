@@ -15,7 +15,11 @@ class CreateRecommendationsTable extends Migration
     {
         Schema::create('recommendations', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('recommendation');
+            $table->text('recommendation');
+            $table->unsignedInteger('teeth_id');
+            $table->foreign('teeth_id')->references('id')->on('teeths')->onDelete('cascade');
+            $table->unsignedInteger('tda_id');
+            $table->foreign('tda_id')->references('id')->on('tdas')->onDelete('cascade');
             $table->timestamps();
         });
     }
