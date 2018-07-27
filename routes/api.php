@@ -28,3 +28,6 @@ Route::post('/getTda', 'TdaController@getTdas');
 
 //Recommendations
 Route::post('/getRecommendation', 'RecommendationController@getRecommendation');
+
+//Medical establishments
+Route::post('/getEstablishments', 'MedicalEstablishmentController@getEstablishments');

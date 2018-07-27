@@ -2,83 +2,47 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class MedicalEstablishmentController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
+     * Get near medical establishments
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function getEstablishments(Request $request)
     {
-        //
+        $response = new \stdClass();
+        if (isset($request->commune) && isset($request->schedule)) {
+            //TODO: Validate every attribute
+            if($request->schedule == 1 || $request->schedule == 0) {
+                $establishments = DB::table('medical_establishments')->where([
+                    ['commune_id', $request->commune],
+                    ['schedule', $request->schedule],
+                ])->limit(10)->get();
+                if (!empty($establishments)) {
+                    $response->status = 200;
+                    $response->result = $establishments;
+                } else {
+                    $response->status = 400;
+                    $response->result = 'No existen centros';
+                }
+            } else {
+                $response->status = 400;
+                $response->result = 'Datos invalidos';
+            }
+        } else {
+            $response->status = 400;
+            $response->result = 'Faltan datos';
+        }
+        return response()->json($response);
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }
