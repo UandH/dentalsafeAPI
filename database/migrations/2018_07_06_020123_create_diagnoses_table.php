@@ -18,6 +18,8 @@ class CreateDiagnosesTable extends Migration
             $table->timestamp('incident_date');
             $table->unsignedInteger('recommendation_id');
             $table->foreign('recommendation_id')->references('id')->on('recommendations')->onDelete('cascade');
+            $table->unsignedInteger('user_id');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->timestamps();
         });
     }

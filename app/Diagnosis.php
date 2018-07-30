@@ -10,12 +10,12 @@ class Diagnosis extends Model
         'incidentDate'
     ];
 
-    public function diagnosisUsers() {
-        return $this->hasMany('App\DiagnosisUser');
+    public function users() {
+        return $this->belongsTo('App\Users');
     }
 
     public function diagnoses() {
-        return $this->belongsTo('App\RecommendationTda');
+        return $this->belongsTo('App\Recommendation');
     }
 
     public function medicalappointments() {

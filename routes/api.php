@@ -20,6 +20,9 @@ use Illuminate\Http\Request;
 //     return view('welcome');
 // });
 
+//Users
+Route::post('/registerUser', 'UserController@store');
+Route::get('/getUsers', 'UserController@show');
 //Teeths
 Route::get('/getTeeths', 'TeethController@index');
 
@@ -29,5 +32,12 @@ Route::post('/getTda', 'TdaController@getTdas');
 //Recommendations
 Route::post('/getRecommendation', 'RecommendationController@getRecommendation');
 
+//Diagnoses
+Route::get('/getDiagnoses', 'RecommendationController@showDiagnoses');
+
 //Medical establishments
 Route::post('/getEstablishments', 'MedicalEstablishmentController@getEstablishments');
+
+//Medical appointment
+Route::post('/setAppointment', 'MedicalAppointmentController@store');
+Route::get('/getAppointments', 'MedicalAppointmentController@showAppointments');
