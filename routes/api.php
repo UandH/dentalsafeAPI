@@ -41,3 +41,6 @@ Route::post('/getEstablishments', 'MedicalEstablishmentController@getEstablishme
 //Medical appointment
 Route::post('/setAppointment', 'MedicalAppointmentController@store');
 Route::get('/getAppointments', 'MedicalAppointmentController@showAppointments');
+
+//Commune
+Route::post('/getIdCommune', 'CommuneController@getIdCommune');

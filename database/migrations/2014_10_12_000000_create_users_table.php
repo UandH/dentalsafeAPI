@@ -15,8 +15,10 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('token_id');
-            $table->boolean('status')->default(true);
+            $table->integer('status')->default('1');
+            $table->string('deviceId');
+            $table->string('deviceCountry');
+            $table->timestamp('lastActivity');
             $table->timestamps();
         });
     }

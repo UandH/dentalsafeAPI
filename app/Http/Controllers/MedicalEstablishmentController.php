@@ -17,11 +17,12 @@ class MedicalEstablishmentController extends Controller
     public function getEstablishments(Request $request)
     {
         $response = new \stdClass();
-        if (isset($request->commune) && isset($request->schedule)) {
+        if (!empty($request->commune) && !empty($request->schedule)) {
             //TODO: Validate every attribute
             if($request->schedule == 1 || $request->schedule == 0) {
+                $communeId = DB::table('communes')->where('name', 'like', '%' . $request->commune . '%')->first(['id']);
                 $establishments = DB::table('medical_establishments')->where([
-                    ['commune_id', $request->commune],
+                    ['commune_id', $communeId->id],
                     ['schedule', $request->schedule],
                 ])->limit(10)->get();
                 if (!empty($establishments)) {
