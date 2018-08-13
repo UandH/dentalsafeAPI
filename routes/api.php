@@ -44,3 +44,6 @@ Route::get('/getAppointments', 'MedicalAppointmentController@showAppointments');
 
 //Commune
 Route::post('/getIdCommune', 'CommuneController@getIdCommune');
+
+// Users
+Route::post('/existDiagnosis', 'UserController@existDiagnosis');

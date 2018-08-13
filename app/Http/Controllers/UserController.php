@@ -12,6 +12,31 @@ class UserController extends Controller
         return response()->json($response);
     }
 
+    public function existDiagnosis(Request $request) {
+        $response = new \stdClass();
+        if (isset($request->user) && (strpos($request->user, ';') !== false)) {
+            $user = DB::table('users')->where('deviceId', $request->user)->first(['id']);
+            $diagnosis = DB::table('diagnoses')->where('user_id', $user->id)->first();
+            if (!empty($diagnosis)) {
+                $data = DB::table('recommendations')->where('id', $diagnosis->id)->first(['tda_id', 'recommendation']);
+                $tda = DB::table('tdas')->where('id', $data->tda_id)->first(['tda', 'description', 'quantity']);
+                $response->status = 200;
+                $response->result = 'OK';
+                $response->tda = $tda;
+                $response->data = $data;
+                $response->diagnosis = $diagnosis;
+                
+            } else {
+                $response->status = 400;
+                $response->result = 'No hay registros';
+            }
+        } else {
+            $response->status = 400;
+            $response->result = 'Acceso incorrecto';
+        }
+        return response()->json($response);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
