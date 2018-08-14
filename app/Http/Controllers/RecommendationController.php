@@ -66,7 +66,7 @@ class RecommendationController extends Controller
             $result->id = $recommendation[0]->id ;
             $result->recommendations = $recommendations;
             $response->result = $result;
-            $userId = DB::table('users')->where('token_id', $request->token_id)->first();
+            $userId = DB::table('users')->where('deviceId', $request->$deviceId)->first();
             $now = Carbon::now()->toDateTimeString();
             DB::table('diagnoses')->insert(['incident_date' => $now, 'recommendation_id' => $recommendation[0]->id, 'user_id' => $userId]);
         }
