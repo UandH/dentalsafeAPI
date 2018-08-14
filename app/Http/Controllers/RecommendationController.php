@@ -85,8 +85,8 @@ class RecommendationController extends Controller
             // $teethId = DB::table('teeths')->where('type', 'like', '%'.$request->teeth.'%')->first(['id']);
             $deviceId = DB::table('users')->where('deviceId', $request->deviceId)->first(['id']);
             $recommendationId = DB::table('recommendations')->where([
-                ['tda_id', $tdaId],
-                ['teeth_id', $teethId],
+                ['tda_id', $request->tda],
+                ['teeth_id', $request->teeth],
             ])->first(['id']);
             $diagnosis = DB::table('diagnoses')->insertGetId(['incident_date' => Carbon::now(), 'recommendation_id' => $recommendationId->id, 'user_id' => $deviceId->id]);
             $response->status = 200;
