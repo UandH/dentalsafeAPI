@@ -67,7 +67,7 @@ class RecommendationController extends Controller
             $result->recommendations = $recommendations;
             $response->result = $result;
             $userId = DB::table('users')->where('deviceId', $request->$deviceId)->first();
-            $now = Carbon::now()->toDateTimeString();
+            $now = Carbon::now()->setTimezone('America/Santiago')->toDateTimeString();
             DB::table('diagnoses')->insert(['incident_date' => $now, 'recommendation_id' => $recommendation[0]->id, 'user_id' => $userId]);
         }
         return response()->json($response);
@@ -88,7 +88,7 @@ class RecommendationController extends Controller
                 ['tda_id', intval($request->tda)],
                 ['teeth_id', intval($request->teeth)],
             ])->first(['id']);
-            $diagnosis = DB::table('diagnoses')->insertGetId(['incident_date' => Carbon::now(), 'recommendation_id' => $recommendationId->id, 'user_id' => $deviceId->id]);
+            $diagnosis = DB::table('diagnoses')->insertGetId(['incident_date' => Carbon::now()->setTimezone('America/Santiago'), 'recommendation_id' => $recommendationId->id, 'user_id' => $deviceId->id]);
             $response->status = 200;
             $response->result = 'Diagnostico guardado';
         } else {

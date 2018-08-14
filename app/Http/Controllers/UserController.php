@@ -71,7 +71,7 @@ class UserController extends Controller
             }
         } else {
             if (!empty($request->deviceId)) {
-                $resultId = DB::table('users')->insertGetId(['deviceId' => $request->deviceId, 'deviceCountry' => $request->deviceCountry, 'lastActivity' => Carbon::now()]);
+                $resultId = DB::table('users')->insertGetId(['deviceId' => $request->deviceId, 'deviceCountry' => $request->deviceCountry, 'lastActivity' => $now = Carbon::now()->setTimezone('America/Santiago')]);
                 $response->status = 200;
                 $response->result = $resultId;
                 $response->existDiagnosis = false;

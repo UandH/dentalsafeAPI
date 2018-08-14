@@ -29,7 +29,7 @@ class CommuneController extends Controller
                 $deviceId = DB::table('users')->where('deviceId', $request->deviceId)->first();
                 $auth = DB::table('users')->where('deviceCountry', $request->header('auth'))->first();
                 if(empty($deviceId) && empty($auth)) {
-                    DB::table('users')->insert(['name' => 'asd', 'deviceId' => $deviceId, 'deviceCountry' => $auth, 'lastActivity' => Carbon::now()]);
+                    DB::table('users')->insert(['name' => 'asd', 'deviceId' => $deviceId, 'deviceCountry' => $auth, 'lastActivity' => Carbon::now()->setTimezone('America/Santiago')]);
                     $validate = true;
                 } else {
                     $response->status = 404;
