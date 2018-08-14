@@ -45,9 +45,9 @@ class UserController extends Controller
         $user = DB::table('users')->where('deviceId',$userId)->first(['id']);
         $diagnosis = DB::table('diagnoses')->where('user_id', $user->id)->first(); 
         if (empty($diagnosis)) {  
-            return true;
-        } else { 
             return false;
+        } else { 
+            return true;
         }
     }
     /**
