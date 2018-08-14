@@ -23,6 +23,8 @@ use Illuminate\Http\Request;
 //Users
 Route::post('/registerUser', 'UserController@store');
 Route::get('/getUsers', 'UserController@show');
+Route::post('/existDiagnosis', 'UserController@existDiagnosis');
+
 //Teeths
 Route::get('/getTeeths', 'TeethController@index');
 
@@ -45,5 +47,3 @@ Route::get('/getAppointments', 'MedicalAppointmentController@showAppointments');
 //Commune
 Route::post('/getIdCommune', 'CommuneController@getIdCommune');
 
-// Users
-Route::post('/existDiagnosis', 'UserController@existDiagnosis');
