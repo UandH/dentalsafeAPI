@@ -78,4 +78,23 @@ class RecommendationController extends Controller
         return response()->json($diagnoses);
     }
 
+    public function storeDiagnosis(Request $request) {
+        $response = new \stdClass();
+        if (!empty($request) && isset($request->tda) && isset($request->teeth) && isset($request->deviceId)) {
+            $tdaId = DB::table('tdas')->where('tda','like' ,'%'.$request->tda.'%')->first(['id']);
+            $teethId = DB::table('teeths')->where('type', 'like', '%'.$request->teeth.'%')->first(['id']);
+            $deviceId = DB::table('users')->where('deviceId', $request->deviceId)->first(['id']);
+            $recommendationId = DB::table('recommendations')->where([
+                ['tda_id', $tdaId->id],
+                ['teeth_id', $teethId->id],
+            ])->first(['id']);
+            $diagnosis = DB::table('diagnoses')->insertGetId(['incident_date' => Carbon::now(), 'recommendation_id' => $recommendationId->id, 'user_id' => $deviceId->id]);
+            $response->status = 200;
+            $response->result = 'Diagnostico guardado';
+        } else {
+            $response->status = 400;
+            $response->result = 'Faltan datos';
+        }
+        return response()->json($response);
+    }
 }

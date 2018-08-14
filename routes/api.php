@@ -33,6 +33,7 @@ Route::post('/getTda', 'TdaController@getTdas');
 
 //Recommendations
 Route::post('/getRecommendation', 'RecommendationController@getRecommendation');
+Route::post('/storeDiagnosis', 'RecommendationController@storeDiagnosis');
 
 //Diagnoses
 Route::get('/getDiagnoses', 'RecommendationController@showDiagnoses');
