@@ -25,7 +25,6 @@ class UserController extends Controller
                 $response->data = $data;
                 $response->diagnosis = $diagnosis;
                 return $response;
-                
             }
         } 
         return false;
