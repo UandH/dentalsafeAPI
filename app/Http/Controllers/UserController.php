@@ -17,16 +17,18 @@ class UserController extends Controller
         $response = new \stdClass();
         if (isset($request->user) && (strpos($request->user, ';') !== false)) {
             $user = DB::table('users')->where('deviceId', $request->user)->first(['id']);
-            $diagnosis = DB::table('diagnoses')->where('user_id', $user->id)->first();
+            $diagnosis = DB::table('diagnoses')->where('user_id', $user->id)->get();
             if (!empty($diagnosis)) {
-                $data = DB::table('recommendations')->where('id', $diagnosis->id)->first(['tda_id', 'recommendation']);
-                $tda = DB::table('tdas')->where('id', $data->tda_id)->first(['tda', 'description', 'quantity']);
                 $response->status = 200;
                 $response->result = 'OK';
-                $response->tda = $tda;
-                $response->data = $data;
-                $response->diagnosis = $diagnosis;
-                
+                $response->data = array();
+                foreach ($diagnosis as $diag) {
+                    $newObj = new \stdClass();
+                    $newObj->recommendation = DB::table('recommendations')->where('id', $diag->id)->first(['tda_id', 'recommendation']);
+                    $newObj->tda = DB::table('tdas')->where('id', $newObj->recommendation->tda_id)->first(['tda', 'description', 'quantity']);
+                    $newObj->diagnosis = $diag;
+                    array_push($response->data, $newObj);    
+                }
             } else {
                 $response->status = 400;
                 $response->result = 'No hay registros';
