@@ -18,21 +18,22 @@ class UserController extends Controller
         if (isset($request->user) && (strpos($request->user, ';') !== false)) {
             $user = DB::table('users')->where('deviceId', $request->user)->first(['id']);
             $diagnosis = DB::table('diagnoses')->where('user_id', $user->id)->get();
-            if (!empty($diagnosis)) {
-                $response->status = 200;
-                $response->result = 'OK';
-                $response->data = array();
-                foreach ($diagnosis as $diag) {
-                    $newObj = new \stdClass();
-                    $newObj->recommendation = DB::table('recommendations')->where('id', $diag->id)->first(['tda_id', 'recommendation']);
-                    $newObj->tda = DB::table('tdas')->where('id', $newObj->recommendation->tda_id)->first(['tda', 'description', 'quantity']);
-                    $newObj->diagnosis = $diag;
-                    array_push($response->data, $newObj);    
-                }
-            } else {
-                $response->status = 400;
-                $response->result = 'No hay registros';
-            }
+            return response()->json($diagnosis);
+            // if (!empty($diagnosis)) {
+            //     $response->status = 200;
+            //     $response->result = 'OK';
+            //     $response->data = array();
+            //     foreach ($diagnosis as $diag) {
+            //         $newObj = new \stdClass();
+            //         $newObj->recommendation = DB::table('recommendations')->where('id', $diag->id)->first(['tda_id', 'recommendation']);
+            //         $newObj->tda = DB::table('tdas')->where('id', $newObj->recommendation->tda_id)->first(['tda', 'description', 'quantity']);
+            //         $newObj->diagnosis = $diag;
+            //         array_push($response->data, $newObj);    
+            //     }
+            // } else {
+            //     $response->status = 400;
+            //     $response->result = 'No hay registros';
+            // }
         } else {
             $response->status = 400;
             $response->result = 'Acceso incorrecto';
