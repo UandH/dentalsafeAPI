@@ -41,7 +41,7 @@ class RecommendationController extends Controller
         $response = new \stdClass();
 
         // Check if the request has the two attributes necessaries for the query, if the atributes aren't specified return a 200 code. 
-        if (empty($request) || empty($request->tda) || empty($request->teeth) || empty($request->deviceId)) {
+        if (empty($request->tda) || empty($request->teeth) || empty($request->deviceId)) {
             $response->status = 400;
             $response->result = 'Debe ingresar todos los datos';
             return response()->json($response);
