@@ -68,7 +68,6 @@ class RecommendationController extends Controller
             $response->result = $result;
             $userId = DB::table('users')->where('deviceId', $request->$deviceId)->first();
             $now = Carbon::now()->setTimezone('America/Santiago')->toDateTimeString();
-            DB::table('diagnoses')->insert(['incident_date' => $now, 'recommendation_id' => $recommendation[0]->id, 'user_id' => $userId]);
         }
         return response()->json($response);
     }
