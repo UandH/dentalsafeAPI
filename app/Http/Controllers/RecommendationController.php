@@ -89,7 +89,7 @@ class RecommendationController extends Controller
             $diagnosis = DB::table('diagnoses')->insertGetId(['incident_date' => Carbon::now()->setTimezone('America/Santiago'), 'recommendation_id' => $recommendationId->id, 'user_id' => $deviceId->id]);
             $response->status = 200;
             $response->result = 'Diagnostico guardado';
-            $response->description = explode(';', $tda);
+            $response->description = explode(';', $tda->description);
         } else {
             $response->status = 400;
             $response->result = 'Faltan datos';
