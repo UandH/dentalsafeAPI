@@ -20,7 +20,8 @@ class MedicalAppointmentController extends Controller
         if (!empty($request->userId) && !empty($request->diagnosisId) ) {
             if ($request->datesToDelete) {
                 if (strpos($request->datesToDelete, ',') !== FALSE) {
-                    $datesToDelete = explode(', ', $request->datesToDelete);
+                    $datesToDeleteGarbage = str_replace('"', '', $request->datesToDelete);
+                    $datesToDelete = explode(', ', $datesToDeleteGarbage);
                     foreach ($datesToDelete as $dateUnparsed) {
                         $dateParsed = Carbon::parse($dateUnparsed);
                         $day = $dateParsed->day >= 0 && $dateParsed->day <= 9 ? ('0' . $dateParsed->day) : $dateParsed->day;
@@ -35,7 +36,8 @@ class MedicalAppointmentController extends Controller
                     $response->status = 200;
                     $response->result = 'Fechas eliminadas';
                 } else {
-                    $dateParsed = Carbon::parse($request->datesToDelete);
+                    $dateToParsedGarbage = str_replace('"', '', $request->datesToDelete);
+                    $dateParsed = Carbon::parse($dateToParsedGarbage);
                     $day = $dateParsed->day >= 0 && $dateParsed->day <= 9 ? ('0' . $dateParsed->day) : $dateParsed->day;
                     $month = $dateParsed->month >= 0 && $dateParsed->month <= 9 ? ('0' . $dateParsed->month) : $dateParsed->month;
                     $date = $dateParsed->year . '-' . $month . '-' . $day;
@@ -66,19 +68,35 @@ class MedicalAppointmentController extends Controller
                     $response->status = 400;
                     $response->result = 'No puede ingresar más citas';
                 } else if ($request->datesToRegister) {
-                    $datesToRegister = explode(', ', $request->datesToRegister);
-                    foreach ($datesToRegister as $date) {
+                    if (strpos($request->datesToDelete, ',') !== FALSE) {
+                        $datesToRegisterGarbage = str_replace('"', '', $request->datesToRegister);
+                        $datesToRegister = explode(', ', $datesToRegisterGarbage);
+                        foreach ($datesToRegister as $date) {
+                            if ($quantityActual < $quantityPossible) {
+                                if (count(DB::table('medical_appointments')->where([
+                                    ['date', 'like', '%'.$date.'%'],
+                                    ['diagnosis_id', $diagnosis->id],
+                                    ['status', true]
+                                ])->get()) == 0) {
+                                    array_push($dates, DB::table('medical_appointments')->insertGetId(['date' => $date, 'diagnosis_id' => $diagnosis->id]));              
+                                    $quantityActual++;
+                                }
+                            }
+                        }
+                    } else {
+                        $dateToRegister = str_replace('"', '', $request->datesToRegister);
                         if ($quantityActual < $quantityPossible) {
                             if (count(DB::table('medical_appointments')->where([
-                                ['date', 'like', '%'.$date.'%'],
+                                ['date', 'like', '%'.$dateToRegister.'%'],
                                 ['diagnosis_id', $diagnosis->id],
                                 ['status', true]
                             ])->get()) == 0) {
-                                array_push($dates, DB::table('medical_appointments')->insertGetId(['date' => $date, 'diagnosis_id' => $diagnosis->id]));              
+                                array_push($dates, DB::table('medical_appointments')->insertGetId(['date' => $dateToRegister, 'diagnosis_id' => $diagnosis->id]));              
                                 $quantityActual++;
                             }
                         }
                     }
+                    
                     $response->status = 200;
                     $response->result = 'Ingreso correcto';
                     $response->dates = $dates;
