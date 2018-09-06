@@ -42,10 +42,10 @@ class MedicalAppointmentController extends Controller
                     $month = $dateParsed->month >= 0 && $dateParsed->month <= 9 ? ('0' . $dateParsed->month) : $dateParsed->month;
                     $date = $dateParsed->year . '-' . $month . '-' . $day;
                     $dt = Carbon::createFromDate($dateParsed->year, $month, $day);
-                    return response()->json($dt);
+                    // return response()->json($dt);
                     DB::table('medical_appointments')->where([
                         ['diagnosis_id', $request->diagnosisId],
-                        ['date', 'like', '%'.$dt.'%'],
+                        ['date', 'like', '%'.$dt->date.'%'],
                         ['status', 1]
                     ])->update(['status' => 0]);
                     $response->status = 200;
