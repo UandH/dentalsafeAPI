@@ -24,14 +24,18 @@ class MedicalAppointmentController extends Controller
                     $datesToDelete = explode(', ', $datesToDeleteGarbage);
                     foreach ($datesToDelete as $dateUnparsed) {
                         $dateParsed = Carbon::parse($dateUnparsed);
-                        $day = $dateParsed->day >= 0 && $dateParsed->day <= 9 ? ('0' . $dateParsed->day) : $dateParsed->day;
-                        $month = $dateParsed->month >= 0 && $dateParsed->month <= 9 ? ('0' . $dateParsed->month) : $dateParsed->month;
-                        $date = $dateParsed->year . '-' . $month . '-' . $day;
-                        $dt = Carbon::createFromDate($dateParsed->year, $month, $day, 0 , 0, 0);
-                        $dtToInsert = date('Y-m-d H:i:s', $dt->timestamp);
-                        DB::table('medical_appointments')->where([
+                        // $day = $dateParsed->day >= 0 && $dateParsed->day <= 9 ? ('0' . $dateParsed->day) : $dateParsed->day;
+                        // $month = $dateParsed->month >= 0 && $dateParsed->month <= 9 ? ('0' . $dateParsed->month) : $dateParsed->month;
+                        // $date = $dateParsed->year . '-' . $month . '-' . $day;
+                        // $dt = Carbon::createFromDate($dateParsed->year, $month, $day, 0 , 0, 0);
+                        // $dtToInsert = date('Y-m-d H:i:s', $dt->timestamp);
+                        DB::table('medical_appointments')
+                        ->whereYear('date', $dateParsed->year)
+                        ->whereMonth('date', $dateParsed->month)
+                        ->whereDay('date', $dateParsed->day)
+                        ->where([
                             ['diagnosis_id', $request->diagnosisId],
-                            ['date', 'like', '%'.$dtToInsert.'%'],
+                            // ['date', 'like', '%'.$dtToInsert.'%'],
                             ['status', 1]
                         ])->update(['status' => 0]);
                     }
@@ -46,9 +50,13 @@ class MedicalAppointmentController extends Controller
                     $dt = Carbon::createFromDate($dateParsed->year, $month, $day, 0 , 0, 0);
                     $dtToInsert = date('Y-m-d H:i:s', $dt->timestamp);
                     // return response()->json($dtToInsert);
-                    DB::table('medical_appointments')->where([
+                    DB::table('medical_appointments')
+                    ->whereYear('date', $dateParsed->year)
+                    ->whereMonth('date', $dateParsed->month)
+                    ->whereDay('date', $dateParsed->day)
+                    ->where([
+                        // ['date', 'like', '%'.$dateParsed->year.'-'.$dateParsed->month.'-'.$dateParsed->day.'%'],
                         ['diagnosis_id', $request->diagnosisId],
-                        ['date', 'like', '%'.$dateParsed->year.'-'.$dateParsed->month.'-'.$dateParsed->day.'%'],
                         ['status', 1]
                     ])->update(['status' => 0]);
                     $response->status = 200;
@@ -84,10 +92,14 @@ class MedicalAppointmentController extends Controller
                             // $dt = Carbon::createFromDate($date->year, $month, $day, 0 , 0, 0);
                             // $dtToInsert = date('Y-m-d H:i:s', $dt->timestamp);
                             if ($quantityActual < $quantityPossible) {
-                                if (count(DB::table('medical_appointments')->where([
-                                    ['date', 'like', '%'.$dateParsed->year.'-'.$dateParsed->month.'-'.$dateParsed->day.'%'],
-                                    ['diagnosis_id', $diagnosis->id],
-                                    ['status', true]
+                                if (count(DB::table('medical_appointments')
+                                ->whereYear('date', $dateParsed->year)
+                                ->whereMonth('date', $dateParsed->month)
+                                ->whereDay('date', $dateParsed->day)
+                                ->where([
+                                // ['date', 'like', '%'.$dateParsed->year.'-'.$dateParsed->month.'-'.$dateParsed->day.'%'],
+                                ['diagnosis_id', $diagnosis->id],
+                                ['status', true]
                                 ])->get()) == 0) {
                                     array_push($dates, DB::table('medical_appointments')->insertGetId(['date' => $dtToInsert, 'diagnosis_id' => $diagnosis->id]));              
                                     $quantityActual++;
@@ -103,8 +115,12 @@ class MedicalAppointmentController extends Controller
                             // $date = $dateParsed->year . '-' . $month . '-' . $day;
                             // $dt = Carbon::createFromDate($dateParsed->year, $month, $day, 0 , 0, 0);
                             // $dtToInsert = date('Y-m-d H:i:s', $dt->timestamp);
-                            if (count(DB::table('medical_appointments')->where([
-                                ['date', 'like', '%'.$dateParsed->year.'-'.$dateParsed->month.'-'.$dateParsed->day.'%'],
+                            if (count(DB::table('medical_appointments')
+                            ->whereYear('date', $dateParsed->year)
+                            ->whereMonth('date', $dateParsed->month)
+                            ->whereDay('date', $dateParsed->day)
+                            ->where([
+                                // ['date', 'like', '%'.$dateParsed->year.'-'.$dateParsed->month.'-'.$dateParsed->day.'%'],
                                 ['diagnosis_id', $diagnosis->id],
                                 ['status', true]
                             ])->get()) == 0) {
