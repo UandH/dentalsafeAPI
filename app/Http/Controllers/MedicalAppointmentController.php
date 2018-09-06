@@ -101,7 +101,7 @@ class MedicalAppointmentController extends Controller
                                 ['diagnosis_id', $diagnosis->id],
                                 ['status', true]
                                 ])->get()) == 0) {
-                                    array_push($dates, DB::table('medical_appointments')->insertGetId(['date' => $dtToInsert, 'diagnosis_id' => $diagnosis->id]));              
+                                    array_push($dates, DB::table('medical_appointments')->insertGetId(['date' => $dateParsed->year.'-'.$dateParsed->month.'-'.$dateParsed->day, 'diagnosis_id' => $diagnosis->id]));              
                                     $quantityActual++;
                                 }
                             }
