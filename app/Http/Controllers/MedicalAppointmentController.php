@@ -81,11 +81,13 @@ class MedicalAppointmentController extends Controller
                     $response->status = 400;
                     $response->result = 'No puede ingresar más citas';
                 } else if ($request->datesToRegister) {
-                    if (strpos($request->datesToDelete, ',') !== FALSE) {
+                    if (strpos($request->datesToRegister, ', ') !== FALSE) {
+                        // return response()->json('array');
                         $datesToRegisterGarbage = str_replace('"', '', $request->datesToRegister);
                         $datesToRegister = explode(', ', $datesToRegisterGarbage);
                         foreach ($datesToRegister as $date) {
                             $dateParsed = Carbon::parse($date);
+                            
                             // $day = $date->day >= 0 && $date->day <= 9 ? ('0' . $date->day) : $date->day;
                             // $month = $date->month >= 0 && $date->month <= 9 ? ('0' . $date->month) : $date->month;
                             // $date = $date->year . '-' . $month . '-' . $day;
