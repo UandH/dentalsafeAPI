@@ -37,6 +37,7 @@ Route::post('/storeDiagnosis', 'RecommendationController@storeDiagnosis');
 
 //Diagnoses
 Route::get('/getDiagnoses', 'RecommendationController@showDiagnoses');
+Route::post('/tdaUpdated', 'RecommendationController@updateDiagnoses');
 
 //Medical establishments
 Route::post('/getEstablishments', 'MedicalEstablishmentController@getEstablishments');

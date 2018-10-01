@@ -9,28 +9,6 @@ use Carbon\Carbon;
 class RecommendationController extends Controller
 {
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
@@ -96,4 +74,36 @@ class RecommendationController extends Controller
         }
         return response()->json($response);
     }
+
+    public function updateDiagnoses(Request $request) {
+        $response = new \stdClass();
+
+        if (isset($request->diagnosisId) && isset($request->tdaId)) {
+            $diagnosis = DB::table('diagnoses')->where('id', intval($request->diagnosisId))->first();
+            $recommendation = DB::table('recommendations')->where('id', intval($diagnosis->recommendation_id))->first();
+            $newRecommendation = DB::table('recommendations')->where([
+                ['teeth_id', intval($recommendation->teeth_id)],
+                ['tda_id', intval($request->tdaId)],
+            ])->first(['id', 'recommendation', 'tda_id']);
+            DB::table('diagnoses')->where('id', intval($request->diagnosisId))->update([
+                'recommendation_id' => $newRecommendation->id,
+                'confirmed' => 1,
+            ]);
+            $newDiagnosis = DB::table('diagnoses')->where('id', intval($request->diagnosisId))->first();
+            $response->status = 200;
+            $response->result = 'OK';
+            $response->data = new \stdClass();
+            $response->data->diagnosis = $newDiagnosis;
+            $recommendation = explode(';', $newRecommendation->recommendation);
+            $response->data->recommendation = $recommendation;
+            $response->data->tda = DB::table('tdas')->where('id', $newRecommendation->tda_id)->first(['tda', 'description', 'quantity']);
+        } else {
+            DB::table('diagnoses')->where('id', intval($request->diagnosisId))->update(['confirmed' => 1]);
+            $response->status = 200;
+            $response->result = 'OK';
+        }
+
+        return response()->json($response);
+    }
+
 }

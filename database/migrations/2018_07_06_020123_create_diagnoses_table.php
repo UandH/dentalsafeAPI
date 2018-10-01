@@ -16,6 +16,7 @@ class CreateDiagnosesTable extends Migration
         Schema::create('diagnoses', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamp('incident_date');
+            $table->integer('confirmed')->default(0);
             $table->unsignedInteger('recommendation_id');
             $table->foreign('recommendation_id')->references('id')->on('recommendations')->onDelete('cascade');
             $table->unsignedInteger('user_id');
