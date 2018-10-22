@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Response;
 
 class MedicalEstablishmentController extends Controller
 {
@@ -40,7 +41,8 @@ class MedicalEstablishmentController extends Controller
             $response->status = 400;
             $response->result = 'Faltan datos';
         }
-        return response()->json($response);
+//        return response()->json($response);
+        return Response::json($response, $response->status);
     }
 
 

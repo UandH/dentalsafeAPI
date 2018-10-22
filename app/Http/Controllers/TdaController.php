@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Response;
 use Illuminate\Http\Request;
 
 class TdaController extends Controller
@@ -25,7 +26,8 @@ class TdaController extends Controller
                 $response->status = 400;
                 $response->result = 'Falta información';
             }
-        return response()->json($response);
+//        return response()->json($response);
+        return Response::json($response, $response->status);
     }
 
 }

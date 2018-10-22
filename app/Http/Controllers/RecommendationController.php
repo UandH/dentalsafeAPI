@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
+use Response;
 
 class RecommendationController extends Controller
 {
@@ -45,7 +46,8 @@ class RecommendationController extends Controller
             $result->recommendations = $recommendations;
             $response->result = $result;
         }
-        return response()->json($response);
+//        return response()->json($response);
+        return Response::json($response, $response->status);
     }
 
     public function showDiagnoses(){
@@ -72,7 +74,8 @@ class RecommendationController extends Controller
             $response->status = 400;
             $response->result = 'Faltan datos';
         }
-        return response()->json($response);
+//        return response()->json($response);
+        return Response::json($response, $response->status);
     }
 
     public function updateDiagnoses(Request $request) {
@@ -97,13 +100,17 @@ class RecommendationController extends Controller
             $recommendation = explode(';', $newRecommendation->recommendation);
             $response->data->recommendation = $recommendation;
             $response->data->tda = DB::table('tdas')->where('id', $newRecommendation->tda_id)->first(['tda', 'description', 'quantity']);
-        } else {
+        } elseif (isset($request->diagnosisId)) {
             DB::table('diagnoses')->where('id', intval($request->diagnosisId))->update(['confirmed' => 1]);
             $response->status = 200;
             $response->result = 'OK';
+        } else {
+            $response->status = 400;
+            $response->result = 'Faltan datos';
         }
 
-        return response()->json($response);
+//        return response()->json($response);
+        return Response::json($response, $response->status);
     }
 
 }

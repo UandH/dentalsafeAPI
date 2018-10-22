@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\DB;
+use Response;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 
@@ -38,7 +39,8 @@ class UserController extends Controller
             $response->status = 400;
             $response->result = 'Acceso incorrecto';
         }
-        return response()->json($response);
+        // return response()->json($response);
+        return Response::json($response, $response->status);
     }
 
 
@@ -80,7 +82,8 @@ class UserController extends Controller
                 $response->result = "Faltan datos";
             }
         }
-        return response()->json($response);
+//        return response()->json($response);
+        return Response::json($response, $response->status);
     }
 
     

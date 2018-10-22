@@ -34,19 +34,22 @@ class CommuneController extends Controller
                 } else {
                     $response->status = 404;
                     $response->result = "Acceso no autorizado";
-                    return response()->json($response);
+//                    return response()->json($response);
+                    return Response::json($response, $response->status);
                 }
             }
             
             
             if (!empty($request->commune) && $validate) {
                 $commune = DB::table('communes')->where('name', 'like', '%' . $request->commune . '%')->first(['id']);
-                return response()->json($commune);
+//                return response()->json($commune);
+                return Response::json($commune, 200);
             }
         } else {
             $response->status = 404;
             $response->result = "Acceso no autorizado";
-            return response()->json($response);
+//            return response()->json($response);
+            return Response::json($response, $response->status);
         }
     }
  
