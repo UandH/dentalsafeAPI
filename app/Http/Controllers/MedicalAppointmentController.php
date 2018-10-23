@@ -67,7 +67,7 @@ class MedicalAppointmentController extends Controller
             if (!empty($diagnosis)) {
                 //TODO:: CHECK QUANTITY MEDICAL AND STATUS
                 $quantityPossible = intval(DB::table('diagnoses')->join('recommendations', 'diagnoses.recommendation_id', '=', 'recommendations.id')->join('tdas', 'recommendations.tda_id', '=', 'tdas.id')->first(['tdas.quantity'])->quantity);
-                $quantityActuxal = DB::table('medical_appointments')->where([
+                $quantityActual = DB::table('medical_appointments')->where([
                     ['diagnosis_id', $request->diagnosisId],
                     ['status', true]
                 ])->count();

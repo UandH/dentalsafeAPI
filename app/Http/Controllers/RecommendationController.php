@@ -23,7 +23,8 @@ class RecommendationController extends Controller
         if (empty($request->tda) || empty($request->teeth) || empty($request->deviceId)) {
             $response->status = 400;
             $response->result = 'Debe ingresar todos los datos';
-            return response()->json($response);
+//            return response()->json($response);
+            return Response::json($response, $response->status);
         }
 
         //Query with the atributes to get the recommendation.
