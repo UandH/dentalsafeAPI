@@ -15,7 +15,7 @@ class CreateUsersTable extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('status')->default('1');
+            $table->integer('status')->default('0');
             $table->string('deviceId');
             $table->string('deviceCountry');
             $table->timestamp('lastActivity');

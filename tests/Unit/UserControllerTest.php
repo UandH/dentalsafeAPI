@@ -70,7 +70,27 @@ class UserControllerTest extends TestCase
         $response->assertStatus(400);
     }
 
-    
-    
+    public function testUpdateUser()
+    {
+        $response = $this->call('POST', 'http://127.0.0.1:8000/api/updateUser', [
+            'deviceId' => 'EF0F0787-D219-45D5-94CE-CA3EA8393223;US'
+        ]);
+        $response->assertStatus(200);
+    }
+
+    public function testUpdateUser_Fail01()
+    {
+        $response = $this->call('POST', 'http://127.0.0.1:8000/api/updateUser', [
+            'deviceId' => 'EF0F0787-D219-45D5-94CE-CA3EA8393123;US',
+        ]);
+        $response->assertStatus(400);
+    }
+
+    public function testUpdateUser_Fail02()
+    {
+        $response = $this->call('POST', 'http://127.0.0.1:8000/api/updateUser');
+        $response->assertStatus(400);
+    }
+
 
 }

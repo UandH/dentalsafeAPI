@@ -5,6 +5,7 @@ use Illuminate\Http\Request;
 
 //Users
 Route::post('/registerUser', 'UserController@store');
+Route::post('/updateUser', 'UserController@updateUser');
 // Route::get('/getUsers', 'UserController@show');
 Route::post('/existDiagnosis', 'UserController@existDiagnosis');
 

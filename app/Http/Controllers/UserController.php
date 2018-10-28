@@ -66,6 +66,7 @@ class UserController extends Controller
         if (!empty($deviceId)) {
             $response->status = 200;
             $response->result = 'Existe el usuario';
+            $response->tutorial = $deviceId->status;
             if ($this->checkDiagnosis($request->deviceId)) {
                 $response->existDiagnosis = true;
             } else {
@@ -76,13 +77,47 @@ class UserController extends Controller
                 $resultId = DB::table('users')->insertGetId(['deviceId' => $request->deviceId, 'deviceCountry' => $request->deviceCountry, 'lastActivity' => $now = Carbon::now()->setTimezone('America/Santiago')]);
                 $response->status = 200;
                 $response->result = $resultId;
+                $response->tutorial = 0;
                 $response->existDiagnosis = false;
             } else {
                 $response->status = 400;
                 $response->result = "Faltan datos";
             }
         }
-//        return response()->json($response);
+        return Response::json($response, $response->status);
+    }
+
+    public function updateUser(Request $request)
+    {
+        $response = new \stdClass();
+
+        if (!empty($request->deviceId)) {
+            $deviceId = DB::table('users')->where('deviceId', $request->deviceId)->first();
+            if (!empty($deviceId)){
+                if (intval($deviceId->status) == 0){
+                    DB::table('users')->where('deviceId', $request->deviceId)->update([
+                        'status' => 1
+                    ]);
+                    $tutorial = DB::table('users')->where('deviceId', $request->deviceId)->first();
+                    if (intval($tutorial->status) == 1){
+                        $response->status = 200;
+                        $response->result = 'Usuario actualizado';
+                    } else {
+                        $response->status = 400;
+                        $response->result = 'Error al actualizar';
+                    }
+                } else {
+                    $response->status = 400;
+                    $response->result = 'Usuario no ha sido actualizado';
+                }
+            } else {
+                $response->status = 400;
+                $response->result = 'Usuario inexistente';
+            }
+        } else {
+            $response->status = 400;
+            $response->result = 'Faltan datos';
+        }
         return Response::json($response, $response->status);
     }
 
