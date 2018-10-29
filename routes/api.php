@@ -13,7 +13,7 @@ Route::post('/existDiagnosis', 'UserController@existDiagnosis');
 // Route::get('/getTeeths', 'TeethController@index');
 
 // //Tdas
-// Route::post('/getTda', 'TdaController@getTdas');
+Route::post('/getTda', 'TdaController@getTdas');
 
 //Recommendations
 Route::post('/getRecommendation', 'RecommendationController@getRecommendation');
