@@ -11,4 +11,6 @@
 |
 */
 
-
+Route::get('/privacy', function(){
+    return view('privacy');
+});
